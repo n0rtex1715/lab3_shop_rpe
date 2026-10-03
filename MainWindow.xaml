@@ -1,0 +1,455 @@
+﻿<Window x:Class="Lab3_Shop_Rukoleev.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Список товаров"
+        Width="1200"
+        Height="750"
+        MinWidth="800"
+        MinHeight="600"
+        Background="White">
+
+    <Window.Resources>
+
+        <!-- ========================================= -->
+        <!-- СТИЛЬ КАРТОЧКИ ТОВАРА -->
+        <!-- ========================================= -->
+
+        <Style x:Key="ProductCardStyle"
+               TargetType="Border">
+
+            <Setter Property="Background"
+                    Value="White"/>
+
+            <Setter Property="BorderBrush"
+                    Value="Black"/>
+
+            <Setter Property="BorderThickness"
+                    Value="2"/>
+
+            <Setter Property="Margin"
+                    Value="8,6"/>
+
+            <Setter Property="Padding"
+                    Value="8"/>
+
+            <Style.Triggers>
+
+                <!-- Если скидка больше 20% -->
+                <DataTrigger Binding="{Binding HasHighDiscount}"
+                             Value="True">
+
+                    <Setter Property="Background"
+                            Value="#C8A2C8"/>
+
+                </DataTrigger>
+
+            </Style.Triggers>
+
+        </Style>
+
+    </Window.Resources>
+
+
+    <!-- ============================================= -->
+    <!-- ОСНОВНОЙ GRID -->
+    <!-- ============================================= -->
+
+    <Grid Background="White">
+
+        <Grid.RowDefinitions>
+
+            <!-- Верхняя панель -->
+            <RowDefinition Height="70"/>
+
+            <!-- Поиск -->
+            <RowDefinition Height="75"/>
+
+            <!-- Список товаров -->
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+
+
+        <!-- ========================================= -->
+        <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+        <!-- ========================================= -->
+
+        <Border Grid.Row="0"
+                BorderBrush="#999999"
+                BorderThickness="0,0,0,1">
+
+            <Grid Margin="10,5">
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                </Grid.ColumnDefinitions>
+
+
+                <!-- Заголовок -->
+
+                <TextBlock Grid.Column="0"
+                           Text="Список товаров"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"/>
+
+
+                <!-- Имя пользователя -->
+
+                <TextBlock Grid.Column="1"
+                           Text="Николова Весения Николаевна"
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Margin="0,0,20,0"/>
+
+
+                <!-- Кнопка выхода -->
+
+                <Button Grid.Column="2"
+                        Content="Выход"
+                        Width="70"
+                        Height="30"
+                        VerticalAlignment="Center"
+                        Padding="5,0"/>
+
+            </Grid>
+
+        </Border>
+
+
+        <!-- ========================================= -->
+        <!-- ПАНЕЛЬ ПОИСКА -->
+        <!-- ========================================= -->
+
+        <Border Grid.Row="1"
+                BorderBrush="#999999"
+                BorderThickness="0,0,0,1">
+
+            <Grid Margin="10,5">
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="25"/>
+
+                    <RowDefinition Height="40"/>
+
+                </Grid.RowDefinitions>
+
+
+                <!-- Заголовок блока поиска -->
+
+                <TextBlock Grid.Row="0"
+                           Text="Средства поиска"
+                           FontSize="14"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"/>
+
+
+                <!-- Строка поиска -->
+
+                <Grid Grid.Row="1">
+
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="70"/>
+
+                        <ColumnDefinition Width="*"/>
+
+                    </Grid.ColumnDefinitions>
+
+
+                    <TextBlock Grid.Column="0"
+                               Text="Поиск:"
+                               FontSize="14"
+                               VerticalAlignment="Center"/>
+
+
+                    <!-- Поле поиска -->
+
+                    <Grid Grid.Column="1">
+
+                        <TextBox x:Name="SearchTextBox"
+                                 Height="32"
+                                 FontSize="14"
+                                 VerticalContentAlignment="Center"
+                                 Padding="8,0"
+                                 TextChanged="SearchTextBox_TextChanged"/>
+
+
+                        <!-- Подсказка -->
+                        <TextBlock x:Name="SearchHint"
+                                   Text="Поиск..."
+                                   Foreground="Gray"
+                                   FontSize="14"
+                                   VerticalAlignment="Center"
+                                   Margin="10,0"
+                                   IsHitTestVisible="False"/>
+
+                    </Grid>
+
+                </Grid>
+
+            </Grid>
+
+        </Border>
+
+
+        <!-- ========================================= -->
+        <!-- СПИСОК ТОВАРОВ -->
+        <!-- ========================================= -->
+
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+
+            <ItemsControl ItemsSource="{Binding Products}">
+
+
+                <!-- ================================= -->
+                <!-- ТОВАРЫ ИДУТ ВЕРТИКАЛЬНО -->
+                <!-- ================================= -->
+
+                <ItemsControl.ItemsPanel>
+
+                    <ItemsPanelTemplate>
+
+                        <StackPanel Orientation="Vertical"/>
+
+                    </ItemsPanelTemplate>
+
+                </ItemsControl.ItemsPanel>
+
+
+                <!-- ================================= -->
+                <!-- ШАБЛОН ТОВАРА -->
+                <!-- ================================= -->
+
+                <ItemsControl.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <Border Style="{StaticResource ProductCardStyle}">
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+
+                                    <!-- Фотография -->
+                                    <ColumnDefinition Width="160"/>
+
+                                    <!-- Информация -->
+                                    <ColumnDefinition Width="*"/>
+
+                                    <!-- Количество -->
+                                    <ColumnDefinition Width="140"/>
+
+                                </Grid.ColumnDefinitions>
+
+
+                                <!-- ================================= -->
+                                <!-- ФОТОГРАФИЯ -->
+                                <!-- ================================= -->
+
+                                <Border Grid.Column="0"
+                                        BorderBrush="Black"
+                                        BorderThickness="2"
+                                        Margin="4"
+                                        Height="105">
+
+                                    <Grid>
+
+                                        <!-- Заглушка -->
+                                        <TextBlock Text="PHOTO"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="14"/>
+
+
+                                        <!-- Изображение товара -->
+
+                                        <Image Source="{Binding ImagePath, Mode=OneWay}"
+                                               Stretch="Uniform"
+                                               Margin="3"/>
+
+                                    </Grid>
+
+                                </Border>
+
+
+                                <!-- ================================= -->
+                                <!-- ИНФОРМАЦИЯ О ТОВАРЕ -->
+                                <!-- ================================= -->
+
+                                <Border Grid.Column="1"
+                                        BorderBrush="Black"
+                                        BorderThickness="2"
+                                        Margin="4">
+
+                                    <StackPanel Margin="6">
+
+
+                                        <!-- Название товара -->
+
+                                        <TextBlock Text="{Binding ProductName, Mode=OneWay}"
+                                                   FontSize="15"
+                                                   FontWeight="Bold"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,3"/>
+
+
+                                        <!-- Артикул -->
+
+                                        <TextBlock FontSize="12"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,2">
+
+                                            <Run Text="Артикул: "
+                                                 FontWeight="Bold"/>
+
+                                            <Run Text="{Binding Article, Mode=OneWay}"/>
+
+                                        </TextBlock>
+
+
+                                        <!-- Описание -->
+
+                                        <TextBlock FontSize="12"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,2">
+
+                                            <Run Text="Описание товара: "
+                                                 FontWeight="Bold"/>
+
+                                            <Run Text="{Binding Description, Mode=OneWay}"/>
+
+                                        </TextBlock>
+
+
+                                        <!-- Производитель -->
+
+                                        <TextBlock FontSize="12"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,2">
+
+                                            <Run Text="Производитель: "
+                                                 FontWeight="Bold"/>
+
+                                            <Run Text="{Binding Manufacturer, Mode=OneWay}"/>
+
+                                        </TextBlock>
+
+
+                                        <!-- Поставщик -->
+
+                                        <TextBlock FontSize="12"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,2">
+
+                                            <Run Text="Поставщик: "
+                                                 FontWeight="Bold"/>
+
+                                            <Run Text="{Binding Supplier, Mode=OneWay}"/>
+
+                                        </TextBlock>
+
+
+                                        <!-- Цена -->
+
+                                        <TextBlock FontSize="12"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,2">
+
+                                            <Run Text="Цена: "
+                                                 FontWeight="Bold"/>
+
+                                            <Run Text="{Binding PriceText, Mode=OneWay}"
+                                                 Foreground="Red"
+                                                 FontWeight="Bold"/>
+
+                                        </TextBlock>
+
+
+                                        <!-- Единица измерения -->
+
+                                        <TextBlock FontSize="12"
+                                                   TextWrapping="Wrap">
+
+                                            <Run Text="Единица измерения: "
+                                                 FontWeight="Bold"/>
+
+                                            <Run Text="{Binding Unit, Mode=OneWay}"/>
+
+                                        </TextBlock>
+
+
+                                        <!-- Количество на складе -->
+
+                                        <TextBlock FontSize="12"
+                                                   TextWrapping="Wrap">
+
+                                            <Run Text="Количество на складе: "
+                                                 FontWeight="Bold"/>
+
+                                            <Run Text="{Binding CountText, Mode=OneWay}"/>
+
+                                        </TextBlock>
+
+
+                                        <!-- Скидка -->
+
+                                        <TextBlock FontSize="12"
+                                                   TextWrapping="Wrap">
+
+                                            <Run Text="Скидка: "
+                                                 FontWeight="Bold"/>
+
+                                            <Run Text="{Binding DiscountText, Mode=OneWay}"
+                                                 FontWeight="Bold"/>
+
+                                        </TextBlock>
+
+                                    </StackPanel>
+
+                                </Border>
+
+
+                                <!-- ================================= -->
+                                <!-- КОЛИЧЕСТВО НА СКЛАДЕ -->
+                                <!-- ================================= -->
+
+                                <Border Grid.Column="2"
+                                        BorderBrush="Black"
+                                        BorderThickness="2"
+                                        Margin="4">
+
+                                    <TextBlock Text="{Binding CountText, Mode=OneWay}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="20"
+                                               FontWeight="Bold"/>
+
+                                </Border>
+
+
+                            </Grid>
+
+                        </Border>
+
+                    </DataTemplate>
+
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+
+        </ScrollViewer>
+
+    </Grid>
+
+</Window>
